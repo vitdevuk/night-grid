@@ -1,0 +1,19 @@
+/* Shared by index.html and race.html: theme colours, header controls, fixes for non-Latin scripts. */
+:root, .night { --bg:#06070b; --ink:#f4f4f5; --dim:#a1a1aa; --soft:#d4d4d8; --hot:#ff2bd6; --ice:#22e3ff; --sun:#ffe14d; --ok:#7dffb0; --line:#ffffff1f; --field:#12131a; --tint:#ffffff08; --glow1:#3a0f4a; --glow2:#06323d; }
+:root { color-scheme:dark; }
+:root[data-theme="light"] { --bg:#f3f2f7; --ink:#12131a; --dim:#5d6070; --soft:#3c3e4b; --hot:#d4009c; --ice:#007c99; --sun:#8a6d00; --ok:#0b7a3e; --line:#12131a22; --field:#fff; --tint:#12131a0a; --glow1:#ffd0f3; --glow2:#c8f1f8; color-scheme:light; }
+/* .night = parts that stay a night scene in the light theme too: the 3D run, the cards, the course map. */
+.night { color:var(--ink); color-scheme:dark; }
+
+.tools { display:flex; align-items:center; gap:10px; }
+.tools select { width:auto; padding:7px 10px; border-radius:999px; background:transparent; color:inherit; border:1px solid color-mix(in srgb,currentColor 35%,transparent); font:600 13px Inter,sans-serif; cursor:pointer; }
+.tools select option { color:var(--ink); background:var(--bg); }
+.theme { display:flex; gap:2px; padding:2px; border-radius:999px; border:1px solid color-mix(in srgb,currentColor 35%,transparent); }
+.theme button { width:28px; height:28px; display:grid; place-items:center; border:0; border-radius:50%; background:none; color:inherit; cursor:pointer; opacity:.7; }
+.theme button[aria-pressed="true"] { background:color-mix(in srgb,currentColor 24%,transparent); opacity:1; }
+.theme svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.tools :focus-visible { outline:2px solid var(--ice); outline-offset:3px; }
+
+/* Arabic and Persian letters join, so tracking breaks them; tall scripts need more leading than .95. */
+:lang(ar), :lang(fa) { letter-spacing:0 !important; }
+:is(h1,h2,h3):is(:lang(ar),:lang(fa),:lang(he),:lang(ja),:lang(zh)) { line-height:1.2; }

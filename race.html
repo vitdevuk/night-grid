@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-title="title2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NIGHT GRID | Race night</title>
+<meta name="description" content="Entry list, start rules, results and course of the fictional Night Grid racing league.">
+<script>
+// Theme before first paint (no flash): saved choice, else the system setting.
+(function () { var t; try { t = localStorage.getItem("ng-theme"); } catch (e) {}
+  document.documentElement.dataset.theme = t === "light" || t === "dark" ? t : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+:root { --pad:clamp(16px,4vw,48px); }
+* { box-sizing:border-box; margin:0; }
+body { background:radial-gradient(90% 60% at 80% -10%,var(--glow1),#0000 60%),radial-gradient(70% 50% at 0% 0%,var(--glow2),#0000 60%),var(--bg); background-attachment:fixed; color:var(--ink); font:400 16px/1.55 Inter,system-ui,sans-serif; min-height:100vh; }
+h1,h2,h3 { font-family:"Space Grotesk",Inter,sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:-.02em; line-height:.95; overflow-wrap:break-word; }
+h1 { font-size:clamp(44px,8vw,112px); }
+a { color:inherit; text-decoration:none; }
+.eyebrow { font:600 12px/1.4 Inter,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--ice); }
+.btn { display:inline-block; padding:13px 24px; border-radius:999px; font-weight:600; background:var(--hot); color:#fff; box-shadow:0 0 32px #ff2bd680; }
+a:focus-visible { outline:2px solid var(--ice); outline-offset:3px; }
+.nav { display:flex; align-items:center; gap:24px; padding:16px var(--pad); }
+.nav .logo { font:700 20px "Space Grotesk",sans-serif; letter-spacing:.08em; margin-inline-end:auto; }
+.nav .logo b { color:var(--hot); }
+.nav .back { color:var(--dim); font-size:14px; }
+.nav .btn { white-space:nowrap; }
+@media (max-width:820px) { .nav .back { display:none; } }
+@media (max-width:600px) { .nav { gap:10px; } .nav > .btn { display:none; } }
+.tabs { display:flex; gap:8px; padding:8px var(--pad) 0; overflow-x:auto; border-bottom:1px solid var(--line); }
+.tabs a { padding:14px 18px; font:700 13px "Space Grotesk",Inter,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); border-bottom:2px solid #0000; white-space:nowrap; }
+.tabs a:hover { color:var(--ink); }
+main > section { display:none; padding:clamp(40px,7vw,96px) var(--pad); max-width:1180px; }
+main > section:target, main:not(:has(:target)) > #grid { display:block; }
+body:has(#grid:target) .tabs a[href="#grid"], body:has(#flag:target) .tabs a[href="#flag"], body:has(#launch:target) .tabs a[href="#launch"], body:has(#drift:target) .tabs a[href="#drift"], body:not(:has(:target)) .tabs a[href="#grid"] { color:var(--ink); border-color:var(--hot); }
+.lead { color:var(--soft); font-size:18px; max-width:620px; margin:20px 0 36px; }
+.scroll { overflow-x:auto; border:1px solid var(--line); border-radius:16px; }
+table { width:100%; border-collapse:collapse; min-width:560px; }
+th, td { text-align:start; padding:14px 18px; border-bottom:1px solid var(--line); font-size:15px; }
+th { font:600 11px Inter; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
+tr:last-child td { border-bottom:0; }
+td.num { font:700 18px "Space Grotesk",sans-serif; color:var(--ice); }
+.tag { display:inline-block; padding:3px 10px; border-radius:999px; font-size:12px; border:1px solid var(--line); color:var(--dim); }
+.tag.ok { color:var(--ok); border-color:color-mix(in srgb,var(--ok) 35%,transparent); }
+.tag.free { color:var(--sun); border-color:color-mix(in srgb,var(--sun) 40%,transparent); }
+.rules { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; counter-reset:r; padding:0; list-style:none; }
+.rules li { counter-increment:r; }
+.rules a { display:block; height:100%; border:1px solid var(--line); border-radius:16px; padding:24px; background:var(--tint); transition:transform .3s, border-color .3s; }
+.rules a:hover { transform:translateY(-4px); border-color:var(--hot); }
+.rules a::before { content:"0" counter(r); display:block; font:700 40px/1 "Space Grotesk",sans-serif; color:transparent; -webkit-text-stroke:1px var(--hot); margin-bottom:14px; }
+.rules .go { display:inline-block; margin-top:14px; font:600 12px Inter,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--ice); }
+.rules a:hover .go { color:var(--hot); }
+.rules h3 { font-size:22px; line-height:1.1; }
+.rules p { color:var(--dim); margin-top:8px; font-size:15px; }
+.map { border:1px solid var(--line); border-radius:16px; background:#0b0c14; padding:16px; }
+.map svg { display:block; width:100%; height:auto; direction:ltr; } /* a map is not mirrored for right-to-left languages */
+.map text { text-transform:uppercase; }
+.sectors { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:16px; }
+.sectors div { border-inline-start:2px solid var(--ice); padding:4px 0; padding-inline-start:16px; }
+.sectors b { display:block; font:700 22px "Space Grotesk",Inter,sans-serif; text-transform:uppercase; }
+.sectors span { color:var(--dim); font-size:14px; }
+.cta { margin-top:36px; display:flex; flex-wrap:wrap; gap:16px; align-items:center; color:var(--dim); }
+footer { padding:28px var(--pad); border-top:1px solid var(--line); color:var(--dim); font-size:13px; margin-top:40px; }
+</style>
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="index.html">NIGHT<b>GRID</b></a>
+  <a class="back" href="index.html#nights" data-i18n="back">← Back to the run</a>
+  <div class="tools"></div>
+  <a class="btn" href="index.html#join" data-i18n="cta">Get on the grid</a>
+</header>
+<nav class="tabs" aria-label="Race night pages" data-i18n-aria="tabsAria">
+  <a href="#grid">01 <span data-i18n="k1h">The grid</span></a><a href="#flag">02 <span data-i18n="k2h">The flag</span></a><a href="#launch">03 <span data-i18n="k3h">The launch</span></a><a href="#drift">04 <span data-i18n="k4h">The drift</span></a>
+</nav>
+
+<main>
+  <section id="grid">
+    <p class="eyebrow"><span data-date="2026-11-20">Friday 20 November</span> · 23:00 · <span data-i18n="place">Lower district</span></p>
+    <h1 data-i18n="k1h">The grid</h1>
+    <p class="lead" data-i18n="gP">Sixteen places per night, two cars per run. This is who is lined up for the next one. Five places are still open.</p>
+    <div class="scroll"><table>
+      <thead><tr><th data-i18n="thNo">No.</th><th data-i18n="thDriver">Driver</th><th data-i18n="thCar">Car</th><th data-i18n="thClass">Class</th><th data-i18n="thStatus">Status</th></tr></thead>
+      <tbody>
+        <tr><td class="num">01</td><td>Kitsune</td><td data-i18n="car1">3.0 twin-turbo coupe</td><td>Unlimited</td><td><span class="tag ok" data-i18n="ok">Confirmed</span></td></tr>
+        <tr><td class="num">02</td><td>Halo</td><td data-i18n="car2">Electric saloon, dual motor</td><td>Unlimited</td><td><span class="tag ok" data-i18n="ok">Confirmed</span></td></tr>
+        <tr><td class="num">03</td><td>Nova</td><td data-i18n="car3">2.0 turbo hatch</td><td>Tuned</td><td><span class="tag ok" data-i18n="ok">Confirmed</span></td></tr>
+        <tr><td class="num">04</td><td>Ghostline</td><td data-i18n="car4">Rotary coupe</td><td>Tuned</td><td><span class="tag ok" data-i18n="ok">Confirmed</span></td></tr>
+        <tr><td class="num">05</td><td>Marrow</td><td data-i18n="car5">V8 fastback</td><td>Tuned</td><td><span class="tag ok" data-i18n="ok">Confirmed</span></td></tr>
+        <tr><td class="num">06</td><td>Tessa K.</td><td data-i18n="car6">1.6 roadster</td><td>Street</td><td><span class="tag ok" data-i18n="ok">Confirmed</span></td></tr>
+        <tr><td class="num">07</td><td>Oni</td><td data-i18n="car7">2.5 flat-four saloon</td><td>Tuned</td><td><span class="tag ok" data-i18n="ok">Confirmed</span></td></tr>
+        <tr><td class="num">08</td><td>Static</td><td data-i18n="car8">Hot hatch, 1.8 turbo</td><td>Street</td><td><span class="tag ok" data-i18n="ok">Confirmed</span></td></tr>
+        <tr><td class="num">09</td><td>Vesper</td><td data-i18n="car9">Inline-six coupe</td><td>Unlimited</td><td><span class="tag" data-i18n="wait">Waiting for car check</span></td></tr>
+        <tr><td class="num">10</td><td>Low Tide</td><td data-i18n="car10">Kei turbo</td><td>Street</td><td><span class="tag" data-i18n="wait">Waiting for car check</span></td></tr>
+        <tr><td class="num">11</td><td>Arc</td><td data-i18n="car11">Electric hatch</td><td>Street</td><td><span class="tag" data-i18n="wait">Waiting for car check</span></td></tr>
+        <tr><td class="num">12–16</td><td colspan="3" data-i18n="open">Open places</td><td><span class="tag free" data-i18n="free">5 free</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="cta"><a class="btn" href="index.html#join" data-i18n="gBtn">Take a free place</a> <span data-i18n="gClose">Entry closes Thursday at 20:00.</span></p>
+  </section>
+
+  <section id="flag">
+    <p class="eyebrow" data-i18n="flEy">How a start works</p>
+    <h1 data-i18n="k2h">The flag</h1>
+    <p class="lead" data-i18n="flP">There are no lights and no countdown. There is one person with one flag, and six rules everybody keeps.</p>
+    <ol class="rules">
+      <!-- Each rule opens the 3D run on the home page at the moment it describes (index.html?at=progress). -->
+      <li><a href="index.html?at=0.05"><h3 data-i18n="r1h">Roll to the line</h3><p data-i18n="r1p">Both cars stop with front wheels on the white line. The marshal checks the gap.</p><span class="go" data-i18n="seeIt">Watch this moment →</span></a></li>
+      <li><a href="index.html?at=0.19"><h3 data-i18n="r2h">She asks twice</h3><p data-i18n="r2p">The starter looks at each driver in turn. A nod means ready. No nod, no start.</p><span class="go" data-i18n="seeIt">Watch this moment →</span></a></li>
+      <li><a href="index.html?at=0.27"><h3 data-i18n="r3h">Flag up</h3><p data-i18n="r3p">When the flag is above her head, hands stay on the wheel and cars stay still.</p><span class="go" data-i18n="seeIt">Watch this moment →</span></a></li>
+      <li><a href="index.html?at=0.36"><h3 data-i18n="r4h">Flag down</h3><p data-i18n="r4p">The run starts when the flag passes her shoulder. Moving earlier loses the run.</p><span class="go" data-i18n="seeIt">Watch this moment →</span></a></li>
+      <li><a href="index.html?at=0.5"><h3 data-i18n="r5h">Hold your lane</h3><p data-i18n="r5p">Left car stays left to the corner. Crossing the centre line loses the run.</p><span class="go" data-i18n="seeIt">Watch this moment →</span></a></li>
+      <li><a href="#launch"><h3 data-i18n="r6h">No second starts</h3><p data-i18n="r6p">One run per pair. The result stands, whatever happened.</p><span class="go" data-i18n="k3g">Results →</span></a></li>
+    </ol>
+    <p class="cta"><a class="btn" href="#launch" data-i18n="flBtn">See last Friday's results</a></p>
+  </section>
+
+  <section id="launch">
+    <p class="eyebrow"><span data-i18n="res">Results</span> · <span data-date="2026-11-13">Friday 13 November</span></p>
+    <h1 data-i18n="k3h">The launch</h1>
+    <p class="lead" data-i18n="laP">Times over 402 metres from the line to the corner marker, taken by the timing gate.</p>
+    <div class="scroll"><table>
+      <thead><tr><th data-i18n="thPos">Pos.</th><th data-i18n="thDriver">Driver</th><th data-i18n="thClass">Class</th><th data-i18n="thReact">Reaction</th><th>402 m</th><th data-i18n="thExit">Exit speed</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Halo</td><td>Unlimited</td><td>0.21 s</td><td>9.84 s</td><td>236 km/h</td></tr>
+        <tr><td class="num">2</td><td>Kitsune</td><td>Unlimited</td><td>0.18 s</td><td>9.97 s</td><td>241 km/h</td></tr>
+        <tr><td class="num">3</td><td>Marrow</td><td>Tuned</td><td>0.25 s</td><td>10.92 s</td><td>214 km/h</td></tr>
+        <tr><td class="num">4</td><td>Ghostline</td><td>Tuned</td><td>0.19 s</td><td>11.06 s</td><td>209 km/h</td></tr>
+        <tr><td class="num">5</td><td>Nova</td><td>Tuned</td><td>0.23 s</td><td>11.31 s</td><td>203 km/h</td></tr>
+        <tr><td class="num">6</td><td>Oni</td><td>Tuned</td><td>0.31 s</td><td>11.48 s</td><td>201 km/h</td></tr>
+        <tr><td class="num">7</td><td>Static</td><td>Street</td><td>0.22 s</td><td>12.87 s</td><td>178 km/h</td></tr>
+        <tr><td class="num">8</td><td>Tessa K.</td><td>Street</td><td>0.17 s</td><td>13.40 s</td><td>166 km/h</td></tr>
+      </tbody>
+    </table></div>
+    <p class="cta"><a class="btn" href="#drift" data-i18n="laBtn">See the course</a> <span data-i18n="laBest">Best reaction of the night: Tessa K., 0.17 s.</span></p>
+  </section>
+
+  <section id="drift">
+    <p class="eyebrow" data-i18n="drEy">The course · 1.02 km</p>
+    <h1 data-i18n="k4h">The drift</h1>
+    <p class="lead" data-i18n="drP">A straight, one corner and a tunnel. The race is won on the straight and lost at the intersection.</p>
+    <div class="map night"><svg viewBox="0 0 900 360" role="img" aria-label="Course map: start line, straight avenue, right-hand corner at the intersection, tunnel to the finish" data-i18n-aria="mapAria">
+      <defs><filter id="g"><feGaussianBlur stdDeviation="5"/></filter></defs>
+      <path d="M70 290 H560 Q640 290 640 210 V60" fill="none" stroke="#ff2bd6" stroke-width="16" stroke-linecap="round" filter="url(#g)" opacity=".7"/>
+      <path d="M70 290 H560 Q640 290 640 210 V60" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+      <path d="M640 150 V60" fill="none" stroke="#22e3ff" stroke-width="22" stroke-linecap="butt" opacity=".35"/>
+      <path d="M430 290 H760 M640 210 V340" stroke="#ffffff33" stroke-width="2" stroke-dasharray="6 8"/>
+      <g fill="#ffe14d"><rect x="66" y="268" width="6" height="44"/><rect x="618" y="56" width="44" height="6"/></g>
+      <g font-family="Space Grotesk, Inter, sans-serif" font-weight="700" font-size="16" fill="#f4f4f5">
+        <text x="56" y="250" data-i18n="m1">Start</text><text x="250" y="270"><tspan data-i18n="s1h">S1 · Avenue</tspan> · 402 m</text><text x="660" y="262" data-i18n="s2h">S2 · The corner</text><text x="660" y="110" data-i18n="s3h">S3 · Tunnel</text><text x="610" y="40" data-i18n="m5">Finish</text>
+      </g>
+    </svg></div>
+    <div class="sectors">
+      <div><b data-i18n="s1h">S1 · Avenue</b><span data-i18n="s1p">402 m, four lanes, flat. Timed sector.</span></div>
+      <div><b data-i18n="s2h">S2 · The corner</b><span data-i18n="s2p">90° right at the intersection. Entry around 110 km/h.</span></div>
+      <div><b data-i18n="s3h">S3 · Tunnel</b><span data-i18n="s3p">540 m underpass to the finish line.</span></div>
+    </div>
+    <p class="cta"><a class="btn" href="index.html#join" data-i18n="drBtn">Enter the next race</a></p>
+  </section>
+</main>
+
+<footer data-i18n="foot2"><strong>Sample project.</strong> Night Grid is a fictional brand; drivers, times and the course are invented. Page hand-coded by Devbyvito.</footer>
+
+<script src="i18n.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
